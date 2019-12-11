@@ -1,2 +1,1 @@
-# learning-day-react
-Learning day React
+# Learning day React
