@@ -12,6 +12,8 @@ export default class FormCar extends React.Component {
     event.preventDefault();
     const {addCar} = this.props;
     addCar(this.ref.current.value);
+    this.ref.current.value = "";
+
   }
 
   render() {
