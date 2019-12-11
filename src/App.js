@@ -11,14 +11,38 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cars: ["Escort", "Monza"]
+      cars: [
+        {id:1, name: "Escort"},
+        {id:2, name: "Kombi"},
+      ],
     };
   };
 
   addCar = (carName) => {
     const {cars} = this.state;
     this.setState({
-      cars:[...cars, carName]
+      cars:[...cars, {
+        id: cars.length ? Math.max(...cars.map((car) => car.id)) + 1 : 1,
+        name: carName
+      }]
+    });
+  };
+
+  setCarName = (carToChange, carName) => {
+    const {cars} = this.state;
+    this.setState({
+      cars: cars.map((car) => ({
+          id: car.id,
+          name: car.id === carToChange.id ? carName : car.name
+        })
+      )
+    });
+  };
+
+  deleteCar = (carToChange) => {
+    const {cars} = this.state;
+    this.setState({
+      cars: cars.filter((car) => car.id !== carToChange.id)
     });
   };
 
@@ -38,7 +62,7 @@ class App extends Component {
             </Row>
             <Row type="flex" justify="center">
               <Col className="gutter-row" span={24}>
-                  <Cars cars={cars}/>
+                  <Cars cars={cars} setCarName={this.setCarName} deleteCar={this.deleteCar}/>
               </Col>
             </Row>
           </Layout.Content>
