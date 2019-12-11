@@ -1,6 +1,6 @@
 # Learning day React
 
-## Install
+## Install:
 ```
 npm install
 ```
