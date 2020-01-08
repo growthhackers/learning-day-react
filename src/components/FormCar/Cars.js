@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 
 
-export default class Cars extends React.Component {
+export default class Cars extends Component {
   render () {
     const { cars, setCarName, deleteCar, ...rest } = this.props
     return(
       <div>
         {cars.map((car,index) => (
-        <li key={car.id}>
+        <li key={car._id}>
           <input
-            id={car.id}
+            id={car._id}
             type='text'
             name='carName'
             value={car.name}
