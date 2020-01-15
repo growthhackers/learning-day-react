@@ -1,9 +1,66 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import { Row, Col, Layout} from "antd";
+import { Row, Col, Layout, Spin } from "antd";
 import FormCar from "./components/FormCar";
 import Cars from "./components/FormCar/Cars";
 import './App.css';
+import axios from 'axios';
+
+const apiURL = 'https://crudcrud.com/api/3569e3d2bd154309b58f249521b11a82/cars';
+
+const axiosGet = (url) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(
+        (response) => {
+          resolve(response.data)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+const axiosPost = (url, payload) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, payload)
+      .then(
+        (response) => {
+          resolve(response.data)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+const axiosDelete = (url, id) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${url}/${id}/`)
+      .then(
+        (response) => {
+          resolve(response.data)
+        },
+        (error) => {
+          reject(error)
+        }
+      )
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
 
 
 class App extends Component {
@@ -11,21 +68,33 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cars: [
-        {id:1, name: "Escort"},
-        {id:2, name: "Kombi"},
-      ],
+      cars: null,
     };
   };
 
+  componentDidMount() {
+    axiosGet(apiURL)
+      .then((cars) => {
+        this.setState({cars});
+      },
+      (error) => {
+        console.log('Error message: ' + error);
+      });
+  }
+
   addCar = (carName) => {
     const {cars} = this.state;
-    this.setState({
-      cars:[...cars, {
-        id: cars.length ? Math.max(...cars.map((car) => car.id)) + 1 : 1,
-        name: carName
-      }]
-    });
+    axiosPost(apiURL, { name: carName })
+      .then(
+        (newCar) => {
+          this.setState({
+            cars: [...cars, newCar],
+          });
+        },
+        (error) => {
+          console.log('Error message: ' + error);
+        }
+      )
   };
 
   setCarName = (carToChange, carName) => {
@@ -41,9 +110,17 @@ class App extends Component {
 
   deleteCar = (carToChange) => {
     const {cars} = this.state;
-    this.setState({
-      cars: cars.filter((car) => car.id !== carToChange.id)
-    });
+    axiosDelete(apiURL, carToChange._id)
+      .then(
+        () => {
+          this.setState({
+            cars: cars.filter((car) => car._id !== carToChange._id)
+          });
+        },
+        (error) => {
+          console.log('Error message: ' + error);
+        }
+      )
   };
 
   render() {
@@ -62,7 +139,7 @@ class App extends Component {
             </Row>
             <Row type="flex" justify="center">
               <Col className="gutter-row" span={24}>
-                  <Cars cars={cars} setCarName={this.setCarName} deleteCar={this.deleteCar}/>
+                  {cars ? <Cars cars={cars} setCarName={this.setCarName} deleteCar={this.deleteCar}/> : <Spin /> }
               </Col>
             </Row>
           </Layout.Content>
