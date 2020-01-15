@@ -6,7 +6,7 @@ import Cars from "./components/FormCar/Cars";
 import './App.css';
 import axios from 'axios';
 
-const apiURL = 'https://crudcrud.com/api/3569e3d2bd154309b58f249521b11a82/cars';
+const apiURL = 'https://crudcrud.com/api/b1a2c5a237984a7e8288d81fe8f7a354/cars';
 
 const axiosGet = (url) => {
   return new Promise((resolve, reject) => {
@@ -135,7 +135,7 @@ class App extends Component {
           </Layout.Header>
           <Layout.Content>
             <Row type="flex" justify="center">
-                <FormCar addCar={this.addCar}/>
+                <FormCar addCar={this.addCar} cars={cars}/>
             </Row>
             <Row type="flex" justify="center">
               <Col className="gutter-row" span={24}>
