@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ErrorFormCar from '../FormCar/ErrorFormCar';
 
 export default class FormCar extends React.Component {
 
@@ -14,16 +14,13 @@ export default class FormCar extends React.Component {
     const {name} = this.state;
     addCar(name);
     this.setState({name: ""});
-
   }
 
-  isCarSubmitable = () => {
+  isCarSubmittable = () => {
     const {cars} = this.props;
     const {name} = this.state;
-    if (!cars || !name){
-      return true;
-    }
-    return !!cars.find((car) => car.name === name);
+
+    return !name || !cars.find((car) => car.name === name);
   }
 
   onChangeName = (event) => {
@@ -41,11 +38,14 @@ export default class FormCar extends React.Component {
           type='text'
           name='name'
         />
-        <button type="submit" disabled={this.isCarSubmitable()}>
+
+        <ErrorFormCar isCarSubmittable={this.isCarSubmittable()} name={name}/>
+
+        <button type="submit" disabled={!this.isCarSubmittable()}>
           Submit
         </button>
       </form>
 
     );
-  }
-}
+  };
+};
