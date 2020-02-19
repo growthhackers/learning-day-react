@@ -20,7 +20,11 @@ export default class FormCar extends React.Component {
     const {cars} = this.props;
     const {name} = this.state;
 
-    return !name || !cars.find((car) => car.name === name);
+    if (!name){
+      return false;
+    }
+
+    return !cars.find((car) => car.name === name);
   }
 
   onChangeName = (event) => {
