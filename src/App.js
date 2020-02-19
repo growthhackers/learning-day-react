@@ -110,7 +110,7 @@ class App extends Component {
 
   deleteCar = (carToChange) => {
     const {cars} = this.state;
-    axiosDelete(apiURL, carToChange._id)
+    return axiosDelete(apiURL, carToChange._id)
       .then(
         () => {
           this.setState({
