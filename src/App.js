@@ -84,7 +84,7 @@ class App extends Component {
 
   addCar = (carName) => {
     const {cars} = this.state;
-    axiosPost(apiURL, { name: carName })
+    return axiosPost(apiURL, { name: carName })
       .then(
         (newCar) => {
           this.setState({
