@@ -6,7 +6,7 @@ import Cars from "./components/FormCar/Cars";
 import './App.css';
 import axios from 'axios';
 
-const apiURL = 'https://crudcrud.com/api/c503d02e5b7b4526b38e895c24782a55/cars';
+const apiURL = 'https://crudcrud.com/api/2ee8a8e55ba74c49a066016b024d3b23/cars';
 
 const axiosGet = (url) => {
   return new Promise((resolve, reject) => {
@@ -84,32 +84,38 @@ class App extends Component {
 
   addCar = (carName) => {
     const {cars} = this.state;
-    return axiosPost(apiURL, { name: carName })
-      .then(
+
+    return new Promise((resolve, reject) => {
+      axiosPost(apiURL, { name: carName }).then(
         (newCar) => {
           this.setState({
             cars: [...cars, newCar],
           });
+
+          resolve();
         },
         (error) => {
           console.log('Error message: ' + error);
+          reject();
         }
-      )
+      );
+    });
   };
 
   setCarName = (carToChange, carName) => {
-    const {cars} = this.state;
+    const { cars } = this.state;
+
     this.setState({
       cars: cars.map((car) => ({
-          id: car.id,
-          name: car.id === carToChange.id ? carName : car.name
-        })
-      )
+        _id: car._id,
+        name: car._id === carToChange._id ? carName : car.name
+      })),
     });
   };
 
   deleteCar = (carToChange) => {
-    const {cars} = this.state;
+    const { cars } = this.state;
+
     return axiosDelete(apiURL, carToChange._id)
       .then(
         () => {

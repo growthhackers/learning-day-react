@@ -15,12 +15,18 @@ export default class FormCar extends React.Component {
   onSubmitRender = (event) => {
     event.preventDefault();
     this.setState({ isLoading: true });
-    const {addCar} = this.props;
-    const {name} = this.state;
+
+    const { addCar } = this.props;
+    const { name } = this.state;
+
     addCar(name).then(() => {
       this.setState({
         isLoading: false,
         name: "",
+      });
+    }, () => {
+      this.setState({
+        isLoading: false,
       });
     });
   }

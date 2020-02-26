@@ -11,19 +11,21 @@ export default class Cars extends Component {
   }
 
   handleClick = (car) => {
-    this.setState({isLoading: true});
     const { deleteCar } = this.props;
 
+    this.setState({ isLoading: true });
+
     deleteCar(car).then(() => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     }).catch(() => {
-      this.setState({isLoading: false})
+      this.setState({ isLoading: false })
     });
   }
 
   render () {
-    const { cars, setCarName, deleteCar, ...rest } = this.props
+    const { cars, setCarName, deleteCar } = this.props;
     const { isLoading } = this.state;
+
     return(
       <div>
         {cars.map((car,index) => (
@@ -35,7 +37,7 @@ export default class Cars extends Component {
             value={car.name}
             onChange={(event) => setCarName(car, event.target.value)}
           />
-          <Button type="button" loading={isLoading} onClick={(event) => this.handleClick(car)}>
+          <Button loading={isLoading} onClick={(event) => this.handleClick(car)}>
             Delete
           </Button>
         </li>
