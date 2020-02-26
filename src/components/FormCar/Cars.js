@@ -1,9 +1,31 @@
 import React, { Component } from 'react';
+import { Button } from 'antd';
 
 
 export default class Cars extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false
+    };
+  }
+
+  handleClick = (car) => {
+    const { deleteCar } = this.props;
+
+    this.setState({ isLoading: true });
+
+    deleteCar(car).then(() => {
+      this.setState({ isLoading: false });
+    }).catch(() => {
+      this.setState({ isLoading: false })
+    });
+  }
+
   render () {
-    const { cars, setCarName, deleteCar, ...rest } = this.props
+    const { cars, setCarName, deleteCar } = this.props;
+    const { isLoading } = this.state;
+
     return(
       <div>
         {cars.map((car,index) => (
@@ -15,9 +37,9 @@ export default class Cars extends Component {
             value={car.name}
             onChange={(event) => setCarName(car, event.target.value)}
           />
-          <button type="button" onClick={(event) => deleteCar(car)}>
+          <Button loading={isLoading} onClick={(event) => this.handleClick(car)}>
             Delete
-          </button>
+          </Button>
         </li>
         ))}
       </div>

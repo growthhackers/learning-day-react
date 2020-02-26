@@ -1,19 +1,34 @@
 import React from 'react';
+import { Button } from 'antd';
 import ErrorFormCar from '../FormCar/ErrorFormCar';
 
 export default class FormCar extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {name:''};
+    this.state = {
+      name:'',
+      isLoading: false
+    };
   }
 
   onSubmitRender = (event) => {
     event.preventDefault();
-    const {addCar} = this.props;
-    const {name} = this.state;
-    addCar(name);
-    this.setState({name: ""});
+    this.setState({ isLoading: true });
+
+    const { addCar } = this.props;
+    const { name } = this.state;
+
+    addCar(name).then(() => {
+      this.setState({
+        isLoading: false,
+        name: "",
+      });
+    }, () => {
+      this.setState({
+        isLoading: false,
+      });
+    });
   }
 
   isCarSubmittable = () => {
@@ -32,7 +47,7 @@ export default class FormCar extends React.Component {
   }
 
   render() {
-    const {name} = this.state;
+    const {name, isLoading} = this.state;
     return (
       <form onSubmit={ this.onSubmitRender }>
         <p>Enter car name:</p>
@@ -45,9 +60,9 @@ export default class FormCar extends React.Component {
 
         <ErrorFormCar isCarSubmittable={this.isCarSubmittable()} name={name}/>
 
-        <button type="submit" disabled={!this.isCarSubmittable()}>
+        <Button loading={isLoading} onClick={this.onSubmitRender} disabled={!this.isCarSubmittable()}>
           Submit
-        </button>
+        </Button>
       </form>
 
     );
